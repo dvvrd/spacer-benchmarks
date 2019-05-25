@@ -1,0 +1,23 @@
+(declare-rel sum ((Array Int Int) Int Int Int Int))
+(declare-rel copy ((Array Int Int) (Array Int Int) (Array Int Int) Int Int))
+(declare-rel fail ())
+(declare-var n Int)
+(declare-var i Int)
+(declare-var acc Int)
+(declare-var x Int)
+(declare-var y Int)
+(declare-var z Int)
+(declare-var s Int)
+(declare-var a (Array Int Int))
+(declare-var b (Array Int Int))
+(declare-var c (Array Int Int))
+(declare-var d (Array Int Int))
+
+(rule (=> (>= i n) (sum a i n acc acc)))
+(rule (=> (and (< i n) (sum a (+ i 1) n (+ acc (select a i)) s)) (sum a i n acc s)))
+
+(rule (=> (>= i n) (copy a b b i n)))
+(rule (=> (and (< i n) (copy a (store b i (select a i)) c (+ i 1) n)) (copy a b c i n)))
+
+(rule (=> (and (copy a a b 0 n) (sum a 0 n 0 x) (sum b 0 n 0 y) (distinct x y)) fail))
+(query fail :print-certificate true :spacer.eq_prop false)
